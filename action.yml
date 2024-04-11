@@ -41,7 +41,7 @@ runs:
     shell: bash
     run: |
       EXPIRATION_DATE=$(date -d "${{ inputs.days-rentention }} days ago" +%s)
-      branches=""
+      branches=()
       echo "/// ${{ inputs.namespace }} /// Branches with last commit before $(date -d @${EXPIRATION_DATE} +'%Y-%m-%d %H:%M:%S') are expired. Resources can be restored with another branch deploy."
 
       for branch in $(git branch -r | grep -v '\->'); do
@@ -54,7 +54,7 @@ runs:
           
           echo "."
           echo "$BRANCH_NAME last commit $LAST_COMMIT_DATE"
-          branches+="\"$BRANCH_NAME\" "        
+          branches+=(\"$BRANCH_NAME\")        
         fi
       done
 
@@ -65,7 +65,7 @@ runs:
     run: |
       echo "Test"
       branches=${{ steps.expired.outputs.exp-branches }}
-
+      
       for branch in ${branches[@]};
       do
         array=${{ inputs.release-names-array }}
