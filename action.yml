@@ -26,6 +26,8 @@ inputs:
     
 runs:
   using: 'composite'
+  outputs:
+    expired-branches: ${{ expired-branches.outputs.exp-branches }}
   steps:
   - name: Checkout repository
     uses: actions/checkout@v3
@@ -72,3 +74,10 @@ runs:
             echo "helm uninstall -n ${{ inputs.namespace }} $release_name"
           done
         done
+
+cleanup-run:
+  name: Clean Up Resources
+  steps:
+  - name: Test
+    shell: bash
+    run: echo "Test"
