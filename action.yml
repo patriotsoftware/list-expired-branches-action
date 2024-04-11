@@ -72,10 +72,3 @@ runs:
             echo "helm uninstall -n ${{ inputs.namespace }} $release_name"
           done
         done
-
-# cleanup-run:
-#   name: Clean Up Resources
-#   steps:
-#   - name: Test
-#     shell: bash
-#     run: echo "Test"
