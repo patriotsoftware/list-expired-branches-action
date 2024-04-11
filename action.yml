@@ -54,7 +54,7 @@ runs:
           
           echo "."
           echo "$BRANCH_NAME last commit $LAST_COMMIT_DATE"
-          branches+=("$BRANCH_NAME")        
+          branches+=(\"$BRANCH_NAME\")        
         fi
       done
 
