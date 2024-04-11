@@ -26,16 +26,13 @@ inputs:
     
 runs:
   using: 'composite'
-  env:
-    expire-weeks: ${{ inputs.days-rentention }}
-    namespace: payrollcore
   steps:
   - name: Expired Branches
     id: expired-branches
     run: |
-        EXPIRATION_DATE=$(date -d "${{ env.expire-weeks }} weeks ago" +%s)
+        EXPIRATION_DATE=$(date -d "${{ inputs.days-rentention }} weeks ago" +%s)
         branches=()
-        echo "/// ${{ env.namespace }} /// Branches with last commit before $(date -d @${EXPIRATION_DATE} +'%Y-%m-%d %H:%M:%S') are expired. Resources can be restored with another branch deploy."
+        echo "/// ${{ inputs.namespace }} /// Branches with last commit before $(date -d @${EXPIRATION_DATE} +'%Y-%m-%d %H:%M:%S') are expired. Resources can be restored with another branch deploy."
 
         for branch in $(git branch -r | grep -v '\->'); do
           BRANCH_NAME=${branch#origin/}
@@ -53,5 +50,5 @@ runs:
 
         for branch in ${branches[@]};
         do
-          echo "helm uninstall $branch -n ${{ env.namespace }} "
+          echo "helm uninstall $branch -n ${{ inputs.namespace }} "
         done
