@@ -26,6 +26,7 @@ inputs:
     
 runs:
   using: 'composite'
+  name: 'Clean Up Expired Repository Resources'
   steps:
   - name: Checkout repository
     uses: actions/checkout@v3
@@ -62,7 +63,7 @@ runs:
     - name: Helm Uninstall
       shell: bash
       run: |
-        $branches=${{ expired-branches.outputs.exp-branches }}
+        $branches=${{ steps.expired-branches.outputs.exp-branches }}
         for branch in ${branches[@]};
         do
           array=${{ inputs.release-names-array }}
