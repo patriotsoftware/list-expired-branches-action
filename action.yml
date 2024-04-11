@@ -1,4 +1,4 @@
-name: 'Clean Up Expired Repository Resources'
+name: Clean Up Expired Repository Resources
 author: DevOps
 description: Clean up expired respository resources based retention policy
 
