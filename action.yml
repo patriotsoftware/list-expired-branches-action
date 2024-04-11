@@ -68,7 +68,11 @@ runs:
         done
       done
 
-      echo "exp-branches=$branches" >> $GITHUB_OUTPUT
+      BRANCHES_JSON=$(echo "${branches[@]}" | jq -R . | jq -s .)
+      echo "::set-output name=branches_json::$BRANCHES_JSON"
+
+      echo "exp-branches=$(echo "${branches[@]}")" >> $GITHUB_OUTPUT
+      # echo "exp-branches=$branches" >> $GITHUB_OUTPUT
 
   - name: Helm Uninstall
     shell: bash
@@ -83,4 +87,10 @@ runs:
           release_name=$r-$branch
           echo "helm uninstall -n ${{ inputs.namespace }} $release_name"
         done
+      done
+
+      BRANCHES_JSON='${{ steps.expired.outputs.branches_json }}'
+      echo "Branch names JSON: $BRANCHES_JSON"
+      echo $BRANCHES_JSON | jq -r '.[]' | while read branchname; do
+        echo "Branch name: $branchname"
       done
