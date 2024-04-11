@@ -37,7 +37,7 @@ runs:
     run: git fetch --all
 
   - name: Expired Branches
-    id: expired-branches
+    id: expired
     shell: bash
     run: |
         EXPIRATION_DATE=$(date -d "${{ inputs.days-rentention }} days ago" +%s)
@@ -63,7 +63,7 @@ runs:
   - name: Helm Uninstall
     shell: bash
     run: |
-      $branches=${{ steps.expired-branches.outputs.exp-branches }}
+      $branches=${{ steps.expired.outputs.exp-branches }}
       for branch in ${branches[@]};
       do
         array=${{ inputs.release-names-array }}
