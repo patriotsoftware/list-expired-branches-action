@@ -64,7 +64,7 @@ runs:
     shell: bash
     run: |
       echo "Test"
-      $branches=${{ steps.expired.outputs.exp-branches }}
+      branches=${{ steps.expired.outputs.exp-branches }}
       # echo "$branches"
       # for branch in ${branches[@]};
       # do
