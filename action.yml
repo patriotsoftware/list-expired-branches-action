@@ -40,25 +40,25 @@ runs:
     id: expired
     shell: bash
     run: |
-        EXPIRATION_DATE=$(date -d "${{ inputs.days-rentention }} days ago" +%s)
-        branches=()
-        echo "/// ${{ inputs.namespace }} /// Branches with last commit before $(date -d @${EXPIRATION_DATE} +'%Y-%m-%d %H:%M:%S') are expired. Resources can be restored with another branch deploy."
+      EXPIRATION_DATE=$(date -d "${{ inputs.days-rentention }} days ago" +%s)
+      branches=()
+      echo "/// ${{ inputs.namespace }} /// Branches with last commit before $(date -d @${EXPIRATION_DATE} +'%Y-%m-%d %H:%M:%S') are expired. Resources can be restored with another branch deploy."
 
-        for branch in $(git branch -r | grep -v '\->'); do
-          BRANCH_NAME=${branch#origin/}
-          LAST_COMMIT=$(git log -1 --format=%ct $branch)
+      for branch in $(git branch -r | grep -v '\->'); do
+        BRANCH_NAME=${branch#origin/}
+        LAST_COMMIT=$(git log -1 --format=%ct $branch)
 
-          if [ "$LAST_COMMIT" -lt "$EXPIRATION_DATE" ] && [ "$branch" != "main" ]; 
-          then
-            LAST_COMMIT_DATE=$(date -d @$LAST_COMMIT +'%Y-%m-%d %H:%M:%S')
-           
-            echo "."
-            echo "$BRANCH_NAME last commit $LAST_COMMIT_DATE"
-            branches+=("$BRANCH_NAME")        
-          fi
-        done
-        
-        echo "::set-output name=exp-branches::$branches"
+        if [ "$LAST_COMMIT" -lt "$EXPIRATION_DATE" ] && [ "$branch" != "main" ]; 
+        then
+          LAST_COMMIT_DATE=$(date -d @$LAST_COMMIT +'%Y-%m-%d %H:%M:%S')
+          
+          echo "."
+          echo "$BRANCH_NAME last commit $LAST_COMMIT_DATE"
+          branches+=("$BRANCH_NAME")        
+        fi
+      done
+      
+      echo "::set-output name=exp-branches::$branches"
 
   - name: Helm Uninstall
     shell: bash
