@@ -63,7 +63,6 @@ runs:
   - name: Helm Uninstall
     shell: bash
     run: |
-      echo "Test"
       branches=${{ steps.expired.outputs.exp-branches }}
       
       for branch in ${branches[@]};
