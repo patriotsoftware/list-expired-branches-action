@@ -68,6 +68,8 @@ runs:
         done
       done
 
+      echo "$branches"
+      echo "${branches[@]}"
       echo "exp-branches=$(echo "${branches[@]}")" >> $GITHUB_OUTPUT
       # BRANCHES_JSON=$(echo "${branches[@]}" | jq -R . | jq -s .)
       # echo "::set-output name=branches_json::$BRANCHES_JSON"
@@ -77,6 +79,8 @@ runs:
     shell: bash
     run: |
       branches=${{ steps.expired.outputs.exp-branches }}
+      echo "$branches"
+      echo "${branches[@]}"
       
       for branch in ${branches[@]};
       do
