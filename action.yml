@@ -57,5 +57,5 @@ runs:
             branches+=("$BRANCH_NAME")        
           fi
         done
-        
+
         echo "::set-output name=exp-branches::$branches"
