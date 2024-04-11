@@ -26,8 +26,6 @@ inputs:
     
 runs:
   using: 'composite'
-  outputs:
-    expired-branches: ${{ expired-branches.outputs.exp-branches }}
   steps:
   - name: Checkout repository
     uses: actions/checkout@v3
