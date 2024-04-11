@@ -57,13 +57,13 @@ runs:
           branches+=("$BRANCH_NAME")        
         fi
       done
-      
-      echo "::set-output name=exp-branches::$branches"
+
+      echo "exp-branches=$branches" >> $GITHUB_OUTPUT
 
   - name: Helm Uninstall
     shell: bash
     run: |
-      $branches=${{ expired.outputs.exp-branches }}
+      $branches=${{ steps.expired.outputs.exp-branches }}
       echo "$branches"
       # for branch in ${branches[@]};
       # do
