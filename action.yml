@@ -57,21 +57,5 @@ runs:
             branches+=("$BRANCH_NAME")        
           fi
         done
-
+        
         echo "::set-output name=exp-branches::$branches"
-        # echo "exp-branches=$branches" >> $GITHUB_OUTPUT
-
-        # echo "::set-output name=exp-branches::$branches"
-        # - name: Helm Uninstall
-        #   shell: bash
-        #   run: |
-        #     $branches=${{ expired-branches.outputs.exp-branches }}
-        #     for branch in ${branches[@]};
-        #     do
-        #       array=${{ inputs.release-names-array }}
-        #       for r in ${array[@]};
-        #       do
-        #         release_name=$r-$branch
-        #         echo "helm uninstall -n ${{ inputs.namespace }} $release_name"
-        #       done
-        #     done
