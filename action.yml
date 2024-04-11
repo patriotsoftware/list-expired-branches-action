@@ -29,6 +29,7 @@ runs:
   steps:
   - name: Expired Branches
     id: expired-branches
+    shell: bash
     run: |
         EXPIRATION_DATE=$(date -d "${{ inputs.days-rentention }} weeks ago" +%s)
         branches=()
