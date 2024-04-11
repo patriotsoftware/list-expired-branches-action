@@ -25,7 +25,6 @@ inputs:
     default: 'deploy'
     
 runs:
-  name: Clean Up Repository
   using: 'composite'
   steps:
   - name: Checkout repository
