@@ -59,11 +59,11 @@ runs:
         done
 
         echo "::set-output name=exp-branches::$branches"
-        
+
   - name: Helm Uninstall
     shell: bash
     run: |
-      $branches=${{ expired-branches.outputs.exp-branches }}
+      $branches=${{ steps.expired-branches.outputs.exp-branches }}
       for branch in ${branches[@]};
       do
         array=${{ inputs.release-names-array }}
