@@ -54,11 +54,21 @@ runs:
            
             echo "."
             echo "$BRANCH_NAME last commit $LAST_COMMIT_DATE"
-            branches+=(\"$BRANCH_NAME\")        
+            branches+=("$BRANCH_NAME")        
           fi
         done
+        echo "::set-output name=exp-branches::$branches"
 
+    - name: Helm Uninstall
+      shell: bash
+      run: |
+        $branches=${{ expired-branches.outputs.exp-branches }}
         for branch in ${branches[@]};
         do
-          echo "helm uninstall $branch -n ${{ inputs.namespace }} "
+          array=${{ inputs.release-names-array }}
+          for r in ${array[@]};
+          do
+            release_name=$r-$branch
+            echo "helm uninstall -n ${{ inputs.namespace }} $release_name"
+          done
         done
