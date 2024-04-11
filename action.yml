@@ -65,13 +65,13 @@ runs:
     run: |
       echo "Test"
       branches=${{ steps.expired.outputs.exp-branches }}
-      # echo "$branches"
-      # for branch in ${branches[@]};
-      # do
-      #   array=${{ inputs.release-names-array }}
-      #   for r in ${array[@]};
-      #   do
-      #     release_name=$r-$branch
-      #     echo "helm uninstall -n ${{ inputs.namespace }} $release_name"
-      #   done
-      # done
+      
+      for branch in ${branches[@]};
+      do
+        array=${{ inputs.release-names-array }}
+        for r in ${array[@]};
+        do
+          release_name=$r-$branch
+          echo "helm uninstall -n ${{ inputs.namespace }} $release_name"
+        done
+      done
