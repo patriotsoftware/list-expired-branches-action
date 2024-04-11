@@ -57,9 +57,10 @@ runs:
             branches+=("$BRANCH_NAME")        
           fi
         done
-      # echo "::set-output name=exp-branches::$branches"
+        
         echo "exp-branches=$branches" >> $GITHUB_OUTPUT
 
+  # echo "::set-output name=exp-branches::$branches"
     # - name: Helm Uninstall
     #   shell: bash
     #   run: |
