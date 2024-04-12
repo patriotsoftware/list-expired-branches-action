@@ -36,10 +36,13 @@ runs:
       passed=${{ inputs.release-names-array }}
       if [ -z "${passed}" ]; 
       then        
+        # single="($namespace)"
+        # echo "array=$single" >> $GITHUB_OUTPUT
+        echo "array=${{ inputs.release-names-array }}" >> $GITHUB_OUTPUT
+      else
+        # echo "array=${{ inputs.release-names-array }}" >> $GITHUB_OUTPUT
         single="($namespace)"
         echo "array=$single" >> $GITHUB_OUTPUT
-      else
-        echo "array=${{ inputs.release-names-array }}" >> $GITHUB_OUTPUT
       fi      
 
   - name: Checkout repository
