@@ -32,14 +32,14 @@ runs:
     id: release-names
     shell: bash
     run: |
-      namespace=${{ inputs.namespace }}
+      # namespace=${{ inputs.namespace }}
       passed=${{ inputs.release-names-array }}
-      single="(\"$namespace\")"
-      echo "Namespace:$namespace Single:$single"
-      if [ "$passed[@]" != '']; then
-        single="$passed[@]"  
-      fi
-      echo "array="$single" >> $GITHUB_OUTPUT
+      # single="(\"$namespace\")"
+      # echo "Namespace:$namespace Single:$single"
+      # if [ "$passed[@]" != '']; then
+      #   single="$passed[@]"  
+      # fi
+      # echo "array="$single" >> $GITHUB_OUTPUT
 
   - name: Checkout repository
     uses: actions/checkout@v3
@@ -79,7 +79,7 @@ runs:
     run: |
       for branch in ${{ steps.expired-branches.outputs.array }};
       do
-        array=${{ steps.release-names.outputs.array }}
+        array=${{ inputs.release-names-array }}
         for r in ${array[@]};
         do
           release_name=$r-$branch
