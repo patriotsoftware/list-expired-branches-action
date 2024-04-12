@@ -8,7 +8,7 @@ inputs:
     required: true
   release-names-array:
     description: 'Release names array'
-    default: ("${{ inputs.namespace }}")
+    default: ''
     required: false
   days-rentention:
     description: 'Retention policy days'
