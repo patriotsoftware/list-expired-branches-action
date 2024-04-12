@@ -37,7 +37,7 @@ runs:
       # single="(\"$namespace\")"
       # echo "Namespace:$namespace Single:$single"
       # if [ "$passed[@]" != '']; then
-         single="$passed"  
+         single="${passed[@]}"  
       # fi
       echo "array="$single" >> $GITHUB_OUTPUT
 
