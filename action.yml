@@ -36,8 +36,8 @@ runs:
       passed=${{ inputs.release-names-array }}
       single="(\"$namespace\")"
       echo "Namespace:$namespace Single:$single"
-      if [ "$passed" != '']; then
-        single="$passed"  
+      if [ "$passed[@]" != '']; then
+        single="$passed[@]"  
       fi
       echo "array="$single" >> $GITHUB_OUTPUT
 
