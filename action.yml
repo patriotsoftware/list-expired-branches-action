@@ -33,12 +33,13 @@ runs:
     shell: bash
     run: |
       # namespace=${{ inputs.namespace }}
-      # passed=${{ inputs.release-names-array }}
+      passed=${{ inputs.release-names-array }}
       # single="(\"$namespace\")"
       # echo "Namespace:$namespace Single:$single"
-      # if [ "$passed[@]" != '']; then
-      #   single="${passed[@]}"  
-      # fi
+      if [ "${passed[@]}" != '']; then
+        single="${passed[@]}"  
+        echo "not empty"
+      fi
       echo "array=${{ inputs.release-names-array }}" >> $GITHUB_OUTPUT
 
   - name: Checkout repository
