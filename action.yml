@@ -79,7 +79,7 @@ runs:
     run: |
       for branch in ${{ steps.expired-branches.outputs.array }};
       do
-        array=${{ inputs.release-names-array }}
+        array=${{ steps.release-names.outputs.array }}
         for r in ${array[@]};
         do
           release_name=$r-$branch
