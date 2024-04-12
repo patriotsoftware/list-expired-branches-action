@@ -33,13 +33,13 @@ runs:
     shell: bash
     run: |
       # namespace=${{ inputs.namespace }}
-      passed=${{ inputs.release-names-array }}
+      # passed=${{ inputs.release-names-array }}
       # single="(\"$namespace\")"
       # echo "Namespace:$namespace Single:$single"
       # if [ "$passed[@]" != '']; then
-         single="${passed[@]}"  
+      #   single="${passed[@]}"  
       # fi
-      echo "array="$single" >> $GITHUB_OUTPUT
+      echo "array=${{ inputs.release-names-array }}" >> $GITHUB_OUTPUT
 
   - name: Checkout repository
     uses: actions/checkout@v3
