@@ -28,6 +28,9 @@ outputs:
   expired-branches:
     description: 'Expired branches'
     value: ${{ steps.expired-branches.outputs.array }}
+  release-names:
+    description: 'Release names'
+    value: ${{ steps.release-names.outputs.array }}
     
 runs:
   using: 'composite'
