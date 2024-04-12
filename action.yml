@@ -52,20 +52,9 @@ runs:
         then
           LAST_COMMIT_DATE=$(date -d @$LAST_COMMIT +'%Y-%m-%d %H:%M:%S')
           
-          echo "."
-          echo "$BRANCH_NAME last commit $LAST_COMMIT_DATE"
+          echo "$LAST_COMMIT_DATE last commit $BRANCH_NAME"
           branches+=($BRANCH_NAME)        
         fi
-      done
-
-      for branch in ${branches[@]};
-      do
-        array=${{ inputs.release-names-array }}
-        for r in ${array[@]};
-        do
-          release_name=$r-$branch
-          echo "helm uninstall -n ${{ inputs.namespace }} $release_name"
-        done
       done
 
       echo "exp-branches=${branches[@]}" >> $GITHUB_OUTPUT
