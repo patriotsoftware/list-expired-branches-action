@@ -1,6 +1,6 @@
-name: Clean Up Expired Repository Resources
+name: Get Expired Branches
 author: DevOps
-description: Clean up expired respository resources based retention policy
+description: Get expired branches based on retention policy
 
 inputs:
   namespace:
@@ -80,16 +80,3 @@ runs:
 
       echo "----"
       echo "array=${branches[@]}" >> $GITHUB_OUTPUT
-
-  - name: Helm Uninstall
-    shell: bash
-    run: |
-      for branch in ${{ steps.expired-branches.outputs.array }};
-      do
-        array=${{ steps.release-names.outputs.array }}
-        for r in ${array[@]};
-        do
-          release_name=$r-$branch
-          echo "helm uninstall -n ${{ inputs.namespace }} $release_name"
-        done
-      done
