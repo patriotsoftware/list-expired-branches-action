@@ -24,6 +24,10 @@ inputs:
     description: 'CDK folder path. Default is deploy.'
     required: false
     default: 'deploy'
+outputs:
+  expired-branches:
+    description: 'Expired branches'
+    value: ${{ steps.expired-branches.outputs.array }}
     
 runs:
   using: 'composite'
@@ -42,8 +46,7 @@ runs:
         echo "array=${{ inputs.release-names-array }}" >> $GITHUB_OUTPUT
       fi      
 
-  - name: Checkout repository
-    uses: actions/checkout@v3
+  - uses: actions/checkout@v3
     with:
       fetch-depth: 0 # Fetch all history for all branches and tags
 
