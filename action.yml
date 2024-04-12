@@ -35,7 +35,7 @@ runs:
       namespace=${{ inputs.namespace }}
       single="(\"$namespace\")"
       echo "Namespace:$namespace Single:$single"
-      if [ ${{ inputs.release-names-array }} != '']; then
+      if [ "${{ inputs.release-names-array }}" != '']; then
         single="${{ inputs.release-names-array }}"  
       fi
       echo "array="$single" >> $GITHUB_OUTPUT
