@@ -36,7 +36,7 @@ runs:
       passed=${{ inputs.release-names-array }}
       # single="(\"$namespace\")"
       # echo "Namespace:$namespace Single:$single"
-      if [ "${passed[@]}" != '']; then
+      if [ "${passed[@]}" != ""]; then
         single="${passed[@]}"  
         echo "not empty"
       fi
