@@ -34,7 +34,7 @@ runs:
     run: |
       namespace=${{ inputs.namespace }}
       single="(\"$namespace\")"
-      echo "$namespace $single"
+      echo "Namespace:$namespace Single:$single"
       if [ ${{ inputs.release-names-array }} != '']; then
         single="${{ inputs.release-names-array }}"  
       fi
