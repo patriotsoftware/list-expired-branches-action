@@ -30,6 +30,7 @@ runs:
   steps:
   - name: Set release names array
     id: release-names
+    shell: bash
     run: |
       namespace=${{ inputs.namespace }}
       single="(\"$namespace\")"
