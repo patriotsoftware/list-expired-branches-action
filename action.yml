@@ -31,12 +31,13 @@ runs:
   - name: Set release names array
     id: release-names
     run: |
-      single="(\"${{ inputs.namespace }}\")"
-      if [ ${{ inputs.release-names-array }} == '']; then
-        echo "array="$single" >> $GITHUB_OUTPUT 
-      else
-        echo "array=${{ inputs.release-names-array }}" >> $GITHUB_OUTPUT  
+      namespace=${{ inputs.namespace }}
+      single="(\"$namespace\")"
+      echo "$namespace $single"
+      if [ ${{ inputs.release-names-array }} != '']; then
+        single="${{ inputs.release-names-array }}"  
       fi
+      echo "array="$single" >> $GITHUB_OUTPUT
 
   - name: Checkout repository
     uses: actions/checkout@v3
