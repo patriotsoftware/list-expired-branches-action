@@ -28,6 +28,15 @@ inputs:
 runs:
   using: 'composite'
   steps:
+  - name: Set release names array
+    id: release-names
+    run: |
+      if [ ${{ inputs.release-names-array }} == '']; then
+        echo "array=(\"${{ inputs.namespace }}\")" >> $GITHUB_OUTPUT 
+      else
+        echo "array=${{ inputs.release-names-array }}" >> $GITHUB_OUTPUT  
+      fi
+
   - name: Checkout repository
     uses: actions/checkout@v3
     with:
@@ -66,7 +75,7 @@ runs:
     run: |
       for branch in ${{ steps.expired-branches.outputs.array }};
       do
-        array=${{ inputs.release-names-array }}
+        array=${{ steps.release-names.outputs.array }}
         for r in ${array[@]};
         do
           release_name=$r-$branch
