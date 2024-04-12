@@ -32,7 +32,7 @@ runs:
     id: release-names
     run: |
       if [ ${{ inputs.release-names-array }} == '']; then
-        echo "array=(\"${{ inputs.namespace }}\")" >> $GITHUB_OUTPUT 
+        echo "array="(\"${{ inputs.namespace }}\")" >> $GITHUB_OUTPUT 
       else
         echo "array=${{ inputs.release-names-array }}" >> $GITHUB_OUTPUT  
       fi
