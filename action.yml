@@ -32,16 +32,15 @@ runs:
     id: release-names
     shell: bash
     run: |
-      # namespace=${{ inputs.namespace }}
+      namespace=${{ inputs.namespace }}
       passed=${{ inputs.release-names-array }}
-      # single="(\"$namespace\")"
-      # echo "Namespace:$namespace Single:$single"
       if [ -z "${passed}" ]; 
-      then
-        single="$passed"  
-        echo "is empty"
-      fi
-      echo "array=${{ inputs.release-names-array }}" >> $GITHUB_OUTPUT
+      then        
+        single="($namespace)"
+        echo "array=$single" >> $GITHUB_OUTPUT
+      else
+        echo "array=${{ inputs.release-names-array }}" >> $GITHUB_OUTPUT
+      fi      
 
   - name: Checkout repository
     uses: actions/checkout@v3
