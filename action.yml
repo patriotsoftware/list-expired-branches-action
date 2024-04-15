@@ -58,6 +58,7 @@ runs:
     run: git fetch --all
 
   - name: Determine Expired Branches
+    id: find-expired
     shell: bash
     run: |
       EXPIRATION_DATE=$(date -d "${{ inputs.days-rentention }} days ago" +%s)
@@ -84,7 +85,7 @@ runs:
     id: expired
     shell: bash
     run: |
-      data="${{ steps.expired-branches.outputs.array }}"
+      data="${{ steps.find-expired.outputs.array }}"
       data=$(printf '"%s"\n' $data|paste -sd, -)
       echo "before: $data"
       # data="{\"branches\": [$data]}"
