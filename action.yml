@@ -61,7 +61,7 @@ runs:
     id: find-expired
     shell: bash
     run: |
-      EXPIRATION_DATE=$(date -d "${{ inputs.days-rentention }} days ago" +%s)
+      EXPIRATION_DATE=$(date -d "${{ inputs.days-retention }} days ago" +%s)
       branches=()
       echo "/// ${{ inputs.namespace }} /// Branches with last commit $(date -d @${EXPIRATION_DATE} +'%Y-%m-%d %H:%M:%S') and older are expired. Resources can be restored with another branch deploy."
 
