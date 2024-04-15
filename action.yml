@@ -10,7 +10,7 @@ inputs:
     description: 'Release names array'
     default: ''
     required: false
-  days-rentention:
+  days-retention:
     description: 'Retention policy days'
     required: false
     default: 14
