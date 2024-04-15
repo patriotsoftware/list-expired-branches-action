@@ -82,6 +82,7 @@ runs:
 
   - name: Branches
     id: expired
+    shell: bash
     run: |
       data="${{ steps.expired-branches.outputs.array }}"
       data=$(printf '"%s"\n' $data|paste -sd, -)
