@@ -30,7 +30,7 @@ runs:
     run: |
       EXPIRATION_DATE=$(date -d "${{ inputs.days-retention }} days ago" +%s)
       branches=()
-      echo "/// ${{ inputs.namespace }} /// Branches with last commit $(date -d @${EXPIRATION_DATE} +'%Y-%m-%d %H:%M:%S') and older are expired. Resources can be restored with another branch deploy."
+      echo "Branches with last commit $(date -d @${EXPIRATION_DATE} +'%Y-%m-%d %H:%M:%S') and older are expired. Resources can be restored with another branch deploy."
 
       for branch in $(git branch -r | grep -v '\->'); do
         BRANCH_NAME=${branch#origin/}
