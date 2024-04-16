@@ -7,6 +7,7 @@ inputs:
     description: 'Retention policy days'
     required: false
     default: 14
+    
 outputs:
   expired-branches:
     description: 'Expired branches'
