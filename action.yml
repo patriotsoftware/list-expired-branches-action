@@ -11,7 +11,7 @@ inputs:
 outputs:
   expired-branches-json:
     description: 'Expired branches'
-    value: ${{ steps.expired.outputs.json }}
+    value: ${{ steps.expired-branches.outputs.json }}
     
 runs:
   using: 'composite'
@@ -47,8 +47,8 @@ runs:
 
       echo "array=${branches[@]}" >> $GITHUB_OUTPUT
 
-  - name: Branches
-    id: expired
+  - name: Expired Branches JSON
+    id: expired-branches
     shell: bash
     run: |
       data="${{ steps.find-expired.outputs.array }}"
