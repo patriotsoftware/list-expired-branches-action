@@ -7,16 +7,6 @@ inputs:
     description: 'Retention policy days'
     required: false
     default: 14
-  aws-access-key-id:
-    description: 'AWS Access Key ID'
-    required: true
-  aws-secret-access-key:
-    description: 'AWS Secret Access Key'
-    required: true
-  cdk-folder:
-    description: 'CDK folder path. Default is deploy.'
-    required: false
-    default: 'deploy'
 outputs:
   expired-branches:
     description: 'Expired branches'
