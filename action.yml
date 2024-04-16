@@ -3,13 +3,6 @@ author: DevOps
 description: Get expired branches based on retention policy
 
 inputs:
-  namespace:
-    description: 'Helm namespace'
-    required: true
-  release-names-array:
-    description: 'Release names array'
-    default: ''
-    required: false
   days-retention:
     description: 'Retention policy days'
     required: false
@@ -28,27 +21,10 @@ outputs:
   expired-branches:
     description: 'Expired branches'
     value: ${{ steps.expired.outputs.array }}
-  release-names:
-    description: 'Release names'
-    value: ${{ steps.release-names.outputs.array }}
     
 runs:
   using: 'composite'
   steps:
-  - name: Set release names array
-    id: release-names
-    shell: bash
-    run: |
-      namespace=${{ inputs.namespace }}
-      passed=${{ inputs.release-names-array }}
-      if [ -z "${passed}" ]; 
-      then        
-        single="($namespace)"
-        echo "array=$single" >> $GITHUB_OUTPUT
-      else
-        echo "array=${{ inputs.release-names-array }}" >> $GITHUB_OUTPUT
-      fi      
-
   - uses: actions/checkout@v4
     with:
       fetch-depth: 0 # Fetch all history for all branches and tags
