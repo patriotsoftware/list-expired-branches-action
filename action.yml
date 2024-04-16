@@ -7,11 +7,11 @@ inputs:
     description: 'Retention policy days'
     required: false
     default: 14
-    
+
 outputs:
-  expired-branches:
+  expired-branches-json:
     description: 'Expired branches'
-    value: ${{ steps.expired.outputs.array }}
+    value: ${{ steps.expired.outputs.json }}
     
 runs:
   using: 'composite'
@@ -54,5 +54,4 @@ runs:
       data="${{ steps.find-expired.outputs.array }}"
       data=$(printf '"%s"\n' $data|paste -sd, -)
       echo "before: $data"
-      # data="{\"branches\": [$data]}"
-      echo "array={\"branches\": [$data]}" >> $GITHUB_OUTPUT
+      echo "json={\"branches\": [$data]}" >> $GITHUB_OUTPUT
