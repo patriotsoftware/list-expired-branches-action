@@ -1,6 +1,6 @@
-name: Get Expired Branches
+name: List Expired Branches
 author: DevOps
-description: Get expired branches based on retention policy
+description: List expired branches json based on retention policy
 
 inputs:
   days-retention:
@@ -31,7 +31,7 @@ runs:
       EXPIRATION_DATE=$(date -d "${{ inputs.days-retention }} days ago" +%s)
       formatted_exp_date=$(date -d @${EXPIRATION_DATE} +'%Y-%m-%d %H:%M:%S')
       branches=()
-      echo "Branches with last commit $formatted_exp_date and older are expired. Resources can be restored with another branch deploy."
+      echo "Branches with last commit older than $formatted_exp_date are expired. Resources can be restored with another branch deploy."
 
       for branch in $(git branch -r | grep -v '\->'); do
         BRANCH_NAME=${branch#origin/}
@@ -54,5 +54,4 @@ runs:
     run: |
       data="${{ steps.find-expired.outputs.array }}"
       data=$(printf '"%s"\n' $data|paste -sd, -)
-      echo "before: $data"
-      echo "json={\"branches\": [$data]}" >> $GITHUB_OUTPUT
+      echo "json={\"branch_name\": [$data]}" >> $GITHUB_OUTPUT
