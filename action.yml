@@ -9,6 +9,9 @@ inputs:
     default: 14
 
 outputs:
+  has-expired-branches:
+    description: 'Has expired branches'
+    value: ${{ steps.branches.outputs.found }}
   expired-branches-json:
     description: 'Expired branches'
     value: ${{ steps.expired-branches.outputs.json }}
@@ -47,6 +50,17 @@ runs:
       done
 
       echo "array=${branches[@]}" >> $GITHUB_OUTPUT
+
+  - name: Has Expired Branches
+    id: branches
+    shell: bash
+    run: |
+      data="${{ steps.find-expired.outputs.array }}"
+      if [ ${#data[@]} -eq 0 ]; then
+        echo "found=true" >> $GITHUB_OUTPUT
+      else
+        echo "found=false" >> $GITHUB_OUTPUT
+      fi
 
   - name: Expired Branches JSON
     id: expired-branches
