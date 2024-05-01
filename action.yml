@@ -56,7 +56,7 @@ runs:
     shell: bash
     run: |
       data="${{ steps.find-expired.outputs.array }}"
-      if [${#data[@]} -eq 0]; then
+      if [ ${#data[@]} -eq 0 ]; then
         echo "found=false" >> $GITHUB_OUTPUT
       else
         echo "found=true" >> $GITHUB_OUTPUT
