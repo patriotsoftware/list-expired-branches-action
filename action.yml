@@ -57,8 +57,10 @@ runs:
     run: |
       data="${{ steps.find-expired.outputs.array }}"
       if [ ${#data[@]} -eq 0 ]; then
+        echo "Found expired branches."
         echo "found=true" >> $GITHUB_OUTPUT
       else
+        echo "No expired branches found."
         echo "found=false" >> $GITHUB_OUTPUT
       fi
 
