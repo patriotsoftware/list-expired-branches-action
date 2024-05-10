@@ -9,7 +9,7 @@ inputs:
     default: 14
 
 outputs:
-  has-expired-branches:
+  has-branches:
     description: 'Has expired branches'
     value: ${{ steps.branches.outputs.found }}
   expired-branches-json:
