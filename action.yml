@@ -26,7 +26,7 @@ runs:
   - name: Fetch all branches
     shell: bash
     run: git fetch --all
-
+#if: ${{ startsWith(inputs.branch-name, 'v') }}
   - name: Determine Expired Branches
     id: find-expired
     shell: bash
@@ -40,7 +40,11 @@ runs:
         BRANCH_NAME=${branch#origin/}
         LAST_COMMIT=$(git log -1 --format=%ct $branch)
 
-        if [ "$LAST_COMMIT" -lt "$EXPIRATION_DATE" ] && [ "$BRANCH_NAME" != "main" ] && [ "$BRANCH_NAME" != "master" ]; 
+        if 
+        [ "$LAST_COMMIT" -lt "$EXPIRATION_DATE" ] &&
+        [[ "$BRANCH_NAME" = v* ]] && 
+        [ "$BRANCH_NAME" != "main" ] && 
+        [ "$BRANCH_NAME" != "master" ]; 
         then
           LAST_COMMIT_DATE=$(date -d @$LAST_COMMIT +'%Y-%m-%d %H:%M:%S')
           
