@@ -26,7 +26,7 @@ runs:
   - name: Fetch all branches
     shell: bash
     run: git fetch --all
-#if: ${{ startsWith(inputs.branch-name, 'v') }}
+
   - name: Determine Expired Branches
     id: find-expired
     shell: bash
