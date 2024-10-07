@@ -7,14 +7,23 @@ inputs:
     description: 'Retention policy days'
     required: false
     default: 14
+  aws-access-key-id:
+    description: 'AWS Access Key ID'
+    required: true
+  aws-secret-access-key:
+    description: 'AWS Secret Access Key'
+    required: true
+  namespace:
+    description: 'Helm namespace'
+    required: false
 
 outputs:
   has-branches:
     description: 'Has expired branches'
-    value: ${{ steps.branches.outputs.found }}
+    value: ${{ steps.branches.outputs.has-expired }}
   expired-branches-json:
     description: 'Expired branches'
-    value: ${{ steps.expired-branches.outputs.json }}
+    value: ${{ steps.branches.outputs.expired-json }}
     
 runs:
   using: 'composite'
@@ -23,55 +32,17 @@ runs:
     with:
       fetch-depth: 0 # Fetch all history for all branches and tags
 
-  - name: Fetch all branches
-    shell: bash
-    run: git fetch --all
+  - name: Authenticate with DEV
+    id: authenticate_dev
+    uses: aws-actions/configure-aws-credentials@v4
+    with:
+      aws-access-key-id: ${{ inputs.aws-access-key-id }}
+      aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+      aws-region: ${{ inputs.aws-region }}
 
-  - name: Determine Expired Branches
-    id: find-expired
-    shell: bash
-    run: |
-      EXPIRATION_DATE=$(date -d "${{ inputs.days-retention }} days ago" +%s)
-      formatted_exp_date=$(date -d @${EXPIRATION_DATE} +'%Y-%m-%d %H:%M:%S')
-      branches=()
-      echo "Branches with last commit older than $formatted_exp_date are expired. Resources can be restored with another branch deploy."
-
-      for branch in $(git branch -r | grep -v '\->'); do
-        BRANCH_NAME=${branch#origin/}
-        LAST_COMMIT=$(git log -1 --format=%ct $branch)
-
-        if 
-        [ "$LAST_COMMIT" -lt "$EXPIRATION_DATE" ] &&
-        [[ "$BRANCH_NAME" != v* ]] && 
-        [ "$BRANCH_NAME" != "main" ] && 
-        [ "$BRANCH_NAME" != "master" ]; 
-        then
-          LAST_COMMIT_DATE=$(date -d @$LAST_COMMIT +'%Y-%m-%d %H:%M:%S')
-          
-          echo "$LAST_COMMIT_DATE last commit $BRANCH_NAME"
-          branches+=($BRANCH_NAME)        
-        fi
-      done
-
-      echo "array=${branches[@]}" >> $GITHUB_OUTPUT
-
-  - name: Has Expired Branches
-    id: branches
+  - id: branches
+    env:
+      days_retention: ${{ inputs.days-retention }}
     shell: bash
     run: |
-      data="${{ steps.find-expired.outputs.array }}"
-      if [ -z "$data" ]; then
-        echo "No expired branches found."
-        echo "found=false" >> $GITHUB_OUTPUT
-      else        
-        echo "Found expired branches."
-        echo "found=true" >> $GITHUB_OUTPUT
-      fi
-
-  - name: Expired Branches JSON
-    id: expired-branches
-    shell: bash
-    run: |
-      data="${{ steps.find-expired.outputs.array }}"
-      data=$(printf '"%s"\n' $data|paste -sd, -)
-      echo "json={\"branch_name\": [$data]}" >> $GITHUB_OUTPUT
+      ${{ github.action_path }}/gha/expired-branches.sh
