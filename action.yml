@@ -7,14 +7,20 @@ inputs:
     description: 'Retention policy days'
     required: false
     default: 14
+  repository:
+    description: 'Repository'
+  namespace: 
+    description: 'Namespace'
+  branch:
+    description: 'Branch'
 
 outputs:
   has-branches:
     description: 'Has expired branches'
-    value: ${{ steps.branches.outputs.has-expired }}
+    value: ${{ steps.branches.outputs.has-expired-branches }}
   expired-branches-json:
     description: 'Expired branches'
-    value: ${{ steps.branches.outputs.expired-json }}
+    value: ${{ steps.branches.outputs.expired-branches-json }}
     
 runs:
   using: 'composite'

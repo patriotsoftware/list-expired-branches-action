@@ -9,7 +9,7 @@ git_remote="https://github.com/${repository}.git"
 github_branches=$(git ls-remote --heads $git_remote | awk '{print $2}' | sed 's/refs\/heads\///' | grep -vE '(main|master)')
 
 # Helm installed branches excluding main 
-#   NOTE: custom colum is using branch name used during install
+#   NOTE: custom column is using branch name used during install
 helm_branches=$(kubectl get deploy -n $namespace --no-headers  -o custom-columns='BRANCH:.spec.template.spec.containers[*].env[?(@.name=="BRANCH_NAME")].value' | tr ' ' '\n' | sort -u | grep -v -E '^(main|master)$')
 expired_branches=()
 
@@ -22,7 +22,7 @@ for branch in ${github_branches[@]}; do
         LAST_COMMIT_DATE=$(date -d @$LAST_COMMIT +'%Y-%m-%d %H:%M:%S')
 
         echo "$LAST_COMMIT_DATE last commit $branch"
-        expired_branches+=(""$branch"")       
+        expired_branches+=($branch)       
     fi   
 done
 
@@ -33,15 +33,15 @@ for branch in ${helm_branches[@]}; do
     for gh_branch in ${github_branches[@]}; do 
         [[ $gh_branch == $branch ]] && on_GitHub='true' && break
     done 
-    [[ $on_GitHub == 'false' ]] && expired_branches+=(""$branch"")
+    [[ $on_GitHub == 'false' ]] && expired_branches+=($branch)
 done
 
 if [ -z $expired_branches ]; then
     printf '\n%s\n' "No expired branches found."
-    echo "has-expired=false" >> $GITHUB_OUTPUT
+    echo "has-expired-branches=false" >> $GITHUB_OUTPUT
 else        
     printf '\n%s\n' "Found expired branches."
-    echo "has-expired=true" >> $GITHUB_OUTPUT
+    echo "has-expired-branches=true" >> $GITHUB_OUTPUT
 fi
 
 # display results
