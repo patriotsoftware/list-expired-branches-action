@@ -34,4 +34,4 @@ runs:
       days_retention: ${{ inputs.days-retention }}
     shell: bash
     run: |
-      ${{ github.action_path }}/gha/expired-branches.sh
+      bash ${{ github.action_path }}/gha/expired-branches.sh
