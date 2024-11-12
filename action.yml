@@ -18,7 +18,8 @@ outputs:
 runs:
   using: 'composite'
   steps:
-  - if: env.days_retention == ''
+  - shell: bash
+    if: env.days_retention == ''
     env:
       days_retention: 14
     run: |
