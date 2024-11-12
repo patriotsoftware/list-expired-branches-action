@@ -19,10 +19,9 @@ runs:
   using: 'composite'
   steps:
   - shell: bash
-    env:
-      days_retention: 14
+    if: env.days_retention == ''
     run: |
-      echo "days_retention=$days_retention"      
+      echo "days_retention=14" >> $GITHUB_ENV      
 
   - shell: bash
     if: env.namespace == '' || env.days_retention == ''
