@@ -19,7 +19,7 @@ runs:
   using: 'composite'
   steps:
   - shell: bash
-    if: env.days_retention == '' || $env.namespace == ''
+    if: env.days_retention == '' || env.namespace == ''
     run: |
       echo "Failed expected variables check."
       exit 1
