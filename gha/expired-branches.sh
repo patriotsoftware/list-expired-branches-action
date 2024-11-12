@@ -2,7 +2,7 @@
 EXPIRATION_DATE=$(date -d "$days_retention days ago" +%s)
 formatted_exp_date=$(date -d @${EXPIRATION_DATE} +'%Y-%m-%d %H:%M:%S')
 
-printf '%s\n' "Branches with last commit older than $formatted_exp_date are expired. Resources can be restored with another branch deploy."
+printf '%s\n' "Branches with last commit older than $formatted_exp_date ($days_retention days ago) are expired. Resources can be restored with another branch deploy."
 
 # GitHub branches excluding master/main without origin prefix
 git_remote="https://github.com/${repository}.git"
