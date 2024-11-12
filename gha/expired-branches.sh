@@ -1,6 +1,8 @@
+#! /usr/bin/env bash
+
 # define expiration date
 EXPIRATION_DATE=$(date -d "$days_retention days ago" +%s)
-formatted_exp_date=$(date -d @${EXPIRATION_DATE} +'%Y-%m-%d %H:%M:%S')
+formatted_exp_date=$(date -d @"${EXPIRATION_DATE}" +'%Y-%m-%d %H:%M:%S')
 
 printf '%s\n' "Branches with last commit older than $formatted_exp_date ($days_retention days ago) are expired. Resources can be restored with another branch deploy."
 
@@ -18,7 +20,7 @@ helm_branches=$(kubectl get deploy -n $namespace --no-headers  -o custom-columns
 expired_branches=()
 
 # Expired GitHub branches
-for branch in ${github_branches[@]}; do
+for branch in "${github_branches[@]}"; do
     if [ $git_remote != '' ]; then
         COMMIT_HASH=$(git ls-remote $git_remote refs/heads/$branch | awk '{print $1}')
         LAST_COMMIT=$(git show -s --format=%ct $COMMIT_HASH)
@@ -36,9 +38,9 @@ done
 
 # Expired Helm branches
 #   NOTE: helm installed branches that do not exist on GitHub are expired.
-for branch in ${helm_branches[@]}; do
+for branch in "${helm_branches[@]}"; do
     on_GitHub='false'
-    for gh_branch in ${github_branches[@]}; do 
+    for gh_branch in "${github_branches[@]}"; do 
         [[ $gh_branch == $branch ]] && on_GitHub='true' && break
     done 
     [[ $on_GitHub == 'false' ]] && expired_branches+=($branch)
@@ -54,13 +56,13 @@ fi
 
 # display results
 printf '\n%s\n' "//// GitHub Branches ////"
-printf '%s\n' ${github_branches[@]}
+printf '%s\n' "${github_branches[@]}"
 
 printf '\n%s\n' "//// Helm Branches ////"
-printf '%s\n' ${helm_branches[@]}
+printf '%s\n' "${helm_branches[@]}"
 
 printf '\n%s\n' "//// Expired Branches ////"
-printf '%s\n' ${expired_branches[@]}
-expired_data=$(printf '"%s"\n' ${expired_branches[@]}|paste -sd, -)
+printf '%s\n' "${expired_branches[@]}"
+expired_data=$(printf '"%s"\n' "${expired_branches[@]}"|paste -sd, -)
 json_expired_data="{\"branch_name\": [$expired_data]}"
 echo "expired-branches-json=$json_expired_data" >> $GITHUB_OUTPUT
