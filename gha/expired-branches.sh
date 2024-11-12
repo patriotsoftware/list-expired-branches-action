@@ -5,8 +5,12 @@ formatted_exp_date=$(date -d @${EXPIRATION_DATE} +'%Y-%m-%d %H:%M:%S')
 printf '%s\n' "Branches with last commit older than $formatted_exp_date ($days_retention days ago) are expired. Resources can be restored with another branch deploy."
 
 # GitHub branches excluding master/main without origin prefix
-git_remote="https://github.com/${repository}.git"
-github_branches=$(git ls-remote --heads $git_remote | awk '{print $2}' | sed 's/refs\/heads\///' | grep -vE '(main|master)')
+if [ $repository == '' ]; then
+    github_branches=$(git branch -r | grep -v '\->')
+else
+    git_remote="https://github.com/${repository}.git"
+    github_branches=$(git ls-remote --heads $git_remote | awk '{print $2}' | sed 's/refs\/heads\///' | grep -vE '(main|master)')
+fi
 
 # Helm installed branches excluding main 
 #   NOTE: custom column is using branch name used during install
@@ -14,9 +18,13 @@ helm_branches=$(kubectl get deploy -n $namespace --no-headers  -o custom-columns
 expired_branches=()
 
 # Expired GitHub branches
-for branch in ${github_branches[@]}; do    
-    COMMIT_HASH=$(git ls-remote $git_remote refs/heads/$branch | awk '{print $1}')
-    LAST_COMMIT=$(git show -s --format=%ct $COMMIT_HASH)
+for branch in ${github_branches[@]}; do
+    if [ $git_remote != '' ]; then
+        COMMIT_HASH=$(git ls-remote $git_remote refs/heads/$branch | awk '{print $1}')
+        LAST_COMMIT=$(git show -s --format=%ct $COMMIT_HASH)
+    else
+        LAST_COMMIT=$(git log -1 --format=%ct $branch)
+    fi
 
     if [ $LAST_COMMIT -lt $EXPIRATION_DATE ] && [[ $branch != v* ]]; then
         LAST_COMMIT_DATE=$(date -d @$LAST_COMMIT +'%Y-%m-%d %H:%M:%S')

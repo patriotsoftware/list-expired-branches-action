@@ -18,10 +18,6 @@ outputs:
 runs:
   using: 'composite'
   steps:
-  - if: env.repository == ''
-    env:
-      repository: ${{ github.repository }}
-
   - shell: bash
     if: env.days_retention == '' || env.repository == '' || env.repository == ''
     run: |
