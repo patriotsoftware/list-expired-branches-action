@@ -28,6 +28,8 @@ runs:
     if: env.namespace == '' || env.days_retention == ''
     run: |
       echo "Failed expected variables check."
+      echo "env.namespace=${{ env.namespace }}"
+      echo "env.days_retention=${{ env.days_retention }}"
       exit 1
 
   - uses: actions/checkout@v4
