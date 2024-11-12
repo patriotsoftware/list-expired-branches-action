@@ -21,7 +21,7 @@ runs:
   - shell: bash
     if: env.days_retention == ''
     run: |
-      days_retention = 14
+      days_retention=14
 
   - shell: bash
     if: env.namespace == '' || env.days_retention == ''
