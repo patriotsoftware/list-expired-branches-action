@@ -7,12 +7,6 @@ description: List expired branches json based on retention policy
 # ~ $repository
 # ~ $namespace
 
-inputs:
-  days-retention:
-    description: 'Retention policy days'
-    required: false
-    default: 14
-
 outputs:
   has-branches:
     description: 'Has expired branches'
@@ -25,15 +19,10 @@ runs:
   using: 'composite'
   steps:
   - shell: bash
-    if: (env.days_retention == '' && inputs.days-retention == '') || env.repository == '' || env.repository == ''
+    if: env.days_retention == '' || env.repository == '' || env.repository == ''
     run: |
       echo "Failed expected variables check."
       exit 1
-
-  - shell: bash
-    if: env.days_retention == '' && inputs.days-retention != ''
-    run: |
-      $days_retention = ${{ inputs.days-retention }}
 
   - uses: actions/checkout@v4
     with:
