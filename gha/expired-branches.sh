@@ -31,6 +31,7 @@ for branch in "${github_branches[@]}"; do
         LAST_COMMIT=$(git show -s --format=%ct $COMMIT_HASH)
     else
         echo "without git_remote"
+        branch=${branch#origin/}
         LAST_COMMIT=$(git log -1 --format=%ct $branch)
     fi
 
