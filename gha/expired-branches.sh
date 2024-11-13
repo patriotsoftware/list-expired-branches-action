@@ -29,7 +29,7 @@ for branch in "${github_branches[@]}"; do
     COMMIT_HASH=$(git ls-remote $git_remote refs/heads/$branch | awk '{print $1}')
     LAST_COMMIT=$(git show -s --format=%ct $COMMIT_HASH)
 
-    if [ $LAST_COMMIT -lt $EXPIRATION_DATE ] && [ $branch != v* ]; then
+    if [[ $LAST_COMMIT -lt $EXPIRATION_DATE ]] && [[ $branch != v* ]]; then
         LAST_COMMIT_DATE=$(date -d @$LAST_COMMIT +'%Y-%m-%d %H:%M:%S')
 
         echo "$LAST_COMMIT_DATE last commit $branch"
