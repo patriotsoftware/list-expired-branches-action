@@ -30,9 +30,10 @@ for branch in "${github_branches[@]}"; do
         COMMIT_HASH=$(git ls-remote $git_remote refs/heads/$branch | awk '{print $1}')
         LAST_COMMIT=$(git show -s --format=%ct $COMMIT_HASH)
     else
-        echo "without git_remote"
-        branch=${branch#origin/}
-        LAST_COMMIT=$(git log -1 --format=%ct $branch)
+        BRANCH_NAME=${branch#origin/}
+        echo "without git_remote branch=$BRANCH_NAME"
+        LAST_COMMIT=$(git log -1 --format=%ct $BRANCH_NAME)
+        branch=$BRANCH_NAME
     fi
 
     if [ $LAST_COMMIT -lt $EXPIRATION_DATE ] && [[ $branch != v* ]]; then
