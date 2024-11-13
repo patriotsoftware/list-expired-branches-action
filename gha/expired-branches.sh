@@ -11,7 +11,7 @@ echo "repository=$repository"
 # GitHub branches excluding master/main without origin prefix
 if [[ $repository == '' ]]; then
     echo "without repo name"
-    git_remote=$(git remote get-url origin)
+    git_remote="$(git remote get-url origin)"
 else
     echo "with repo name"
     git_remote="https://github.com/${repository}.git"
