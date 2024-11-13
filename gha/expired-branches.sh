@@ -11,7 +11,7 @@ echo "repository=$repository"
 # GitHub branches excluding master/main without origin prefix
 if [[ $repository == '' ]]; then
     echo "without repo name"
-    github_branches=$(git branch -r | awk '{print $2}' | sed 's/refs\/heads\/origin\///' | grep -vE '(main|master)') # | grep -v '\->'
+    github_branches=$(git branch -r | grep -v '\->' | sed 's/refs\/heads\///' | sed 's/origin\///' | grep -vE '(main|master)')
 else
     echo "with repo name"
     git_remote="https://github.com/${repository}.git"
