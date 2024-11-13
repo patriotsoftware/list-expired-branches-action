@@ -36,7 +36,7 @@ for branch in ${github_branches[@]}; do
     if [ $LAST_COMMIT -lt $EXPIRATION_DATE ] && [[ $branch != v* ]]; then
         LAST_COMMIT_DATE=$(date -d @$LAST_COMMIT +'%Y-%m-%d %H:%M:%S')
 
-        echo "$LAST_COMMIT_DATE last commit $branch"
+        echo "$LAST_COMMIT_DATE last commit == $branch"
         expired_branches+=($branch)       
     fi   
 done
@@ -48,7 +48,7 @@ for h_branch in ${helm_branches[@]}; do
     for gh_branch in ${github_branches[@]}; do 
         [[ "$gh_branch" == "$h_branch" ]] && on_GitHub='true' && break
     done 
-    [[ $on_GitHub == 'false' ]] && echo "Installed NOT exists on GitHub $h_branch" && expired_branches+=($h_branch)
+    [[ $on_GitHub == 'false' ]] && echo "Installed NOT exists on GitHub == $h_branch" && expired_branches+=($h_branch)
 done
 
 if [ -z $expired_branches ]; then
