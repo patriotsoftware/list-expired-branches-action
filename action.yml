@@ -2,76 +2,42 @@ name: List Expired Branches
 author: DevOps
 description: List expired branches json based on retention policy
 
-inputs:
-  days-retention:
-    description: 'Retention policy days'
-    required: false
-    default: 14
+# Expected Variables
+# ~ $days_retention
+# ~ $repository
+# ~ $namespace
+
+# NOTE: days_retention defaults to 14 days
 
 outputs:
   has-branches:
     description: 'Has expired branches'
-    value: ${{ steps.branches.outputs.found }}
+    value: ${{ steps.branches.outputs.has-expired-branches }}
   expired-branches-json:
     description: 'Expired branches'
-    value: ${{ steps.expired-branches.outputs.json }}
+    value: ${{ steps.branches.outputs.expired-branches-json }}
     
 runs:
   using: 'composite'
   steps:
+  - shell: bash
+    if: env.days_retention == ''
+    run: |
+      echo "days_retention=14" >> $GITHUB_ENV      
+
+  - shell: bash
+    if: env.namespace == '' || env.days_retention == ''
+    run: |
+      echo "Failed expected variables check."
+      echo "env.namespace=${{ env.namespace }}"
+      echo "env.days_retention=${{ env.days_retention }}"
+      exit 1
+
   - uses: actions/checkout@v4
     with:
       fetch-depth: 0 # Fetch all history for all branches and tags
-
-  - name: Fetch all branches
-    shell: bash
-    run: git fetch --all
-
-  - name: Determine Expired Branches
-    id: find-expired
+      
+  - id: branches
     shell: bash
     run: |
-      EXPIRATION_DATE=$(date -d "${{ inputs.days-retention }} days ago" +%s)
-      formatted_exp_date=$(date -d @${EXPIRATION_DATE} +'%Y-%m-%d %H:%M:%S')
-      branches=()
-      echo "Branches with last commit older than $formatted_exp_date are expired. Resources can be restored with another branch deploy."
-
-      for branch in $(git branch -r | grep -v '\->'); do
-        BRANCH_NAME=${branch#origin/}
-        LAST_COMMIT=$(git log -1 --format=%ct $branch)
-
-        if 
-        [ "$LAST_COMMIT" -lt "$EXPIRATION_DATE" ] &&
-        [[ "$BRANCH_NAME" != v* ]] && 
-        [ "$BRANCH_NAME" != "main" ] && 
-        [ "$BRANCH_NAME" != "master" ]; 
-        then
-          LAST_COMMIT_DATE=$(date -d @$LAST_COMMIT +'%Y-%m-%d %H:%M:%S')
-          
-          echo "$LAST_COMMIT_DATE last commit $BRANCH_NAME"
-          branches+=($BRANCH_NAME)        
-        fi
-      done
-
-      echo "array=${branches[@]}" >> $GITHUB_OUTPUT
-
-  - name: Has Expired Branches
-    id: branches
-    shell: bash
-    run: |
-      data="${{ steps.find-expired.outputs.array }}"
-      if [ -z "$data" ]; then
-        echo "No expired branches found."
-        echo "found=false" >> $GITHUB_OUTPUT
-      else        
-        echo "Found expired branches."
-        echo "found=true" >> $GITHUB_OUTPUT
-      fi
-
-  - name: Expired Branches JSON
-    id: expired-branches
-    shell: bash
-    run: |
-      data="${{ steps.find-expired.outputs.array }}"
-      data=$(printf '"%s"\n' $data|paste -sd, -)
-      echo "json={\"branch_name\": [$data]}" >> $GITHUB_OUTPUT
+      bash ${{ github.action_path }}/gha/expired-branches.sh
