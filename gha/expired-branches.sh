@@ -29,7 +29,7 @@ printf '\n%s\n' "//// Helm Branches ////"
 printf '%s\n' ${helm_branches[@]}
 
 expired_branches=()
-printf '\n%s\n' "//// Determin Expiration Dates ////"
+printf '\n%s\n' "//// Branch Expiration Reason ////"
 
 # Expired GitHub branches
 for branch in ${github_branches[@]}; do
@@ -49,9 +49,9 @@ done
 for h_branch in ${helm_branches[@]}; do
     on_GitHub='false'
     for gh_branch in "${github_branches[@]}"; do 
-        [[ $gh_branch == $h_branch ]] && echo "'$h_branch' is on GitHub" && on_GitHub='true' && break
+        [[ $gh_branch == $h_branch ]] && on_GitHub='true' && break
     done 
-    [[ $on_GitHub == 'false' ]] && echo "'$h_branch' not found on GitHub" && expired_branches+=($h_branch)
+    [[ $on_GitHub == 'false' ]] && echo "Branch installed but NOT exists on GitHub $h_branch" && expired_branches+=($h_branch)
 done
 
 if [ -z $expired_branches ]; then
@@ -64,7 +64,7 @@ fi
 
 # display results
 printf '\n%s\n' "//// Expired Branches ////"
-printf '"%s"\n' "${expired_branches[@]}"
+printf '%s\n' ${expired_branches[@]}
 
 expired_data=$(printf '"%s"\n' "${expired_branches[@]}"|paste -sd, -)
 json_expired_data="{\"branch_name\": [$expired_data]}"
