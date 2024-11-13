@@ -48,10 +48,10 @@ done
 #   NOTE: helm installed branches that do not exist on GitHub are expired.
 for h_branch in ${helm_branches[@]}; do
     on_GitHub='false'
-    for gh_branch in "${github_branches[@]}"; do 
-        [[ $gh_branch == $h_branch ]] && on_GitHub='true' && break
+    for gh_branch in ${github_branches[@]}; do 
+        [[ "$gh_branch" == "$h_branch" ]] && on_GitHub='true' && break
     done 
-    [[ $on_GitHub == 'false' ]] && echo "Branch installed but NOT exists on GitHub $h_branch" && expired_branches+=($h_branch)
+    [[ $on_GitHub == 'false' ]] && echo "Installed NOT exists on GitHub $h_branch" && expired_branches+=($h_branch)
 done
 
 if [ -z $expired_branches ]; then
