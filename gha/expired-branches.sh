@@ -19,9 +19,15 @@ fi
 
 github_branches=$(git ls-remote --heads $git_remote | awk '{print $2}' | sed 's/refs\/heads\///' | grep -vE '(main|master)')
 
+printf '\n%s\n' "//// GitHub Branches ////"
+printf '%s\n' "${github_branches[@]}"
+
 # Helm installed branches excluding main 
 #   NOTE: custom column is using branch name used during install
 helm_branches=$(kubectl get deploy -n $namespace --no-headers  -o custom-columns='BRANCH:.spec.template.spec.containers[*].env[?(@.name=="BRANCH_NAME")].value' | tr ' ' '\n' | sort -u | grep -v -E '^(main|master)$')
+printf '\n%s\n' "//// Helm Branches ////"
+printf '%s\n' "${helm_branches[@]}"
+
 expired_branches=()
 
 # Expired GitHub branches
@@ -56,14 +62,9 @@ else
 fi
 
 # display results
-printf '\n%s\n' "//// GitHub Branches ////"
-printf '%s\n' "${github_branches[@]}"
-
-printf '\n%s\n' "//// Helm Branches ////"
-printf '%s\n' "${helm_branches[@]}"
-
 printf '\n%s\n' "//// Expired Branches ////"
 printf '%s\n' "${expired_branches[@]}"
+
 expired_data=$(printf '"%s"\n' "${expired_branches[@]}"|paste -sd, -)
 json_expired_data="{\"branch_name\": [$expired_data]}"
 echo "expired-branches-json=$json_expired_data" >> $GITHUB_OUTPUT
