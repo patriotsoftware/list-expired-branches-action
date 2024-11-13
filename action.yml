@@ -7,6 +7,8 @@ description: List expired branches json based on retention policy
 # ~ $repository
 # ~ $namespace
 
+# NOTE: days_retention defaults to 14 days
+
 outputs:
   has-branches:
     description: 'Has expired branches'
