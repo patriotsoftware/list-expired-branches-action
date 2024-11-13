@@ -26,12 +26,12 @@ printf '"%s"\n' "${github_branches[@]}"
 #   NOTE: custom column is using branch name used during install
 helm_branches=$(kubectl get deploy -n $namespace --no-headers  -o custom-columns='BRANCH:.spec.template.spec.containers[*].env[?(@.name=="BRANCH_NAME")].value' | tr ' ' '\n' | sort -u | grep -v -E '^(main|master)$')
 printf '\n%s\n' "//// Helm Branches ////"
-printf '"%s"\n' "${helm_branches[@]}"
+printf '%s\n' "${helm_branches[@]}"
 
 expired_branches=()
 
 # Expired GitHub branches
-for branch in "${github_branches[@]}"; do
+for branch in ${github_branches[@]}; do
     COMMIT_HASH=$(git ls-remote $git_remote refs/heads/$branch | awk '{print $1}')
     LAST_COMMIT=$(git show -s --format=%ct $COMMIT_HASH)
 
@@ -45,7 +45,7 @@ done
 
 # Expired Helm branches
 #   NOTE: helm installed branches that do not exist on GitHub are expired.
-for h_branch in "${helm_branches[@]}"; do
+for h_branch in ${helm_branches[@]}; do
     on_GitHub='false'
     for gh_branch in "${github_branches[@]}"; do 
         [[ $gh_branch == $h_branch ]] && echo "'$h_branch' is on GitHub" && on_GitHub='true' && break
