@@ -11,7 +11,7 @@ echo "repository=$repository"
 # GitHub branches excluding master/main without origin prefix
 if [[ $repository == '' ]]; then
     echo "without repo name"
-    github_branches=$(git branch -r | grep -v '\->' | sed 's/refs\/heads\///' | grep -vE '(main|master)')
+    github_branches=$(git branch -r | grep -v '\->' | awk '{print $2}' | sed 's/refs\/heads\///' | grep -vE '(main|master)')
 else
     echo "with repo name"
     git_remote="https://github.com/${repository}.git"
@@ -30,10 +30,8 @@ for branch in "${github_branches[@]}"; do
         COMMIT_HASH=$(git ls-remote $git_remote refs/heads/$branch | awk '{print $1}')
         LAST_COMMIT=$(git show -s --format=%ct $COMMIT_HASH)
     else
-        BRANCH_NAME=${branch#origin/}
-        echo "without git_remote branch=$BRANCH_NAME"
-        LAST_COMMIT=$(git log -1 --format=%ct $BRANCH_NAME)
-        branch=$BRANCH_NAME
+        echo "without git_remote"
+        LAST_COMMIT=$(git log -1 --format=%ct $branch)
     fi
 
     if [ $LAST_COMMIT -lt $EXPIRATION_DATE ] && [[ $branch != v* ]]; then
