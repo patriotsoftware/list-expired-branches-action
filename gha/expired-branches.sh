@@ -9,9 +9,11 @@ printf '%s\n' "Branches with last commit older than $formatted_exp_date ($days_r
 echo "repository=$repository"
 
 # GitHub branches excluding master/main without origin prefix
-if [ $repository == '' ]; then
+if [[ $repository == '' ]]; then
+    echo "without repo name"
     github_branches=$(git branch -r | grep -v '\->')
 else
+    echo "with repo name"
     git_remote="https://github.com/${repository}.git"
     github_branches=$(git ls-remote --heads $git_remote | awk '{print $2}' | sed 's/refs\/heads\///' | grep -vE '(main|master)')
 fi
