@@ -25,7 +25,7 @@ expired_branches=()
 
 # Expired GitHub branches
 for branch in "${github_branches[@]}"; do
-    if [ $git_remote != '' ]; then
+    if [[ $git_remote != '' ]]; then
         echo "using git_remote"
         COMMIT_HASH=$(git ls-remote $git_remote refs/heads/$branch | awk '{print $1}')
         LAST_COMMIT=$(git show -s --format=%ct $COMMIT_HASH)
