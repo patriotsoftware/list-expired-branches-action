@@ -3,10 +3,16 @@
 Returns a json containing the branch names that match a last commit date older than retention policy.
 
 
-## Parameters
+## Expected Environment Variables
 
-#### 'days-retention'
-Optional parameter that allows to specify a number of days as retention policy.
+#### 'days_retention'
+Optional allows to specify a number of days as retention policy.
+
+#### 'repository'
+Optional. GitHub repository name.
+
+#### 'namespace'
+Optional. Namespace used to check helm installs.
 
 ## Output
 
