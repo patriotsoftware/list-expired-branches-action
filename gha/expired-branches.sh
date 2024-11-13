@@ -11,12 +11,13 @@ echo "repository=$repository"
 # GitHub branches excluding master/main without origin prefix
 if [[ $repository == '' ]]; then
     echo "without repo name"
-    github_branches=$(git branch -r | grep -v '\->' | awk '{print $1}' | sed 's/origin\///' | grep -vE '(main|master)')
+    git_remote=$(git remote get-url origin)
 else
     echo "with repo name"
     git_remote="https://github.com/${repository}.git"
-    github_branches=$(git ls-remote --heads $git_remote | awk '{print $2}' | sed 's/refs\/heads\///' | grep -vE '(main|master)')
 fi
+
+github_branches=$(git ls-remote --heads $git_remote | awk '{print $2}' | sed 's/refs\/heads\///' | grep -vE '(main|master)')
 
 # Helm installed branches excluding main 
 #   NOTE: custom column is using branch name used during install
@@ -25,14 +26,8 @@ expired_branches=()
 
 # Expired GitHub branches
 for branch in "${github_branches[@]}"; do
-    if [[ $git_remote != '' ]]; then
-        echo "using git_remote"
-        COMMIT_HASH=$(git ls-remote $git_remote refs/heads/$branch | awk '{print $1}')
-        LAST_COMMIT=$(git show -s --format=%ct $COMMIT_HASH)
-    else
-        echo "without git_remote"
-        LAST_COMMIT=$(git log -1 --format=%ct $branch)
-    fi
+    COMMIT_HASH=$(git ls-remote $git_remote refs/heads/$branch | awk '{print $1}')
+    LAST_COMMIT=$(git show -s --format=%ct $COMMIT_HASH)
 
     if [ $LAST_COMMIT -lt $EXPIRATION_DATE ] && [ $branch != v* ]; then
         LAST_COMMIT_DATE=$(date -d @$LAST_COMMIT +'%Y-%m-%d %H:%M:%S')
