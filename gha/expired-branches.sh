@@ -34,7 +34,7 @@ for branch in "${github_branches[@]}"; do
         LAST_COMMIT=$(git log -1 --format=%ct $branch)
     fi
 
-    if [ $LAST_COMMIT -lt $EXPIRATION_DATE ] && [[ $branch != v* ]]; then
+    if [[ $LAST_COMMIT -lt $EXPIRATION_DATE ] && [ $branch != v* ]]; then
         LAST_COMMIT_DATE=$(date -d @$LAST_COMMIT +'%Y-%m-%d %H:%M:%S')
 
         echo "$LAST_COMMIT_DATE last commit $branch"
